@@ -86,7 +86,18 @@ const addReview = (request, response) => {
     })
 }
 
-module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName, getApartmentInformation, addReview }
+const getReviews = (request, response) => {
+    const apartmentId = parseInt(request.params.id);
+
+    pool.query('SELECT * FROM reviews WHERE apartment_id = $1', [apartmentId], (error, results) => {
+        if (error) {
+            response.status(400).send(`Error: ${error}`);
+        }
+        response.status(200).json(results.rows);
+    })
+}
+
+module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName, getApartmentInformation, addReview, getReviews }
 
 
 

@@ -1,14 +1,17 @@
 <script>
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
-    import { getApartmentInformation, postReview } from '../../../utils.js'
+    import { getApartmentInformation, postReview, getReviews } from '../../../utils.js'
+  import { get } from 'svelte/store';
 
     const id = $page.params.apartment; 
 
     let info = {"name":""};
+    let reviews = [];
 
     onMount(async () => {
         info = await getApartmentInformation(id);
+        reviews = await getReviews(id);
     });
 
     async function addReview() {
@@ -44,6 +47,15 @@
 <p>{info.description}</p>
 
 <h2>Reviews</h2>
+
+{#each reviews as review}
+    <div>
+        <h3>{review.title}</h3>
+        <p>{review.content}</p>
+        <p>Rating: {review.rating}</p>
+    </div>
+{/each}
+
 <div>
     <input type="text" placeholder="Name">
     <input type="text" placeholder="Email">

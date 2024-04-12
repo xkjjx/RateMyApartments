@@ -32,3 +32,9 @@ export const postReview = async (review) => {
     });
     return response;
 }
+
+export const getReviews = async (apartmentId) => {
+    const response = await fetch(`http://localhost:3000/reviews/${apartmentId}`);
+    const data = await response.json();
+    return data;
+}
