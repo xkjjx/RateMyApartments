@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "build": "concurrently \"npm run build-frontend\" \"npm run build-backend\"",
+    "build-prod": "concurrently \"npm run build-frontend-prod\" \"npm run build-backend\"",
+    "build-backend": "cd backend && npm install",
+    "build-frontend": "cd frontend && npm install",
+    "build-frontend-prod": "cd frontend && npm install && npm run build",
+    "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
+    "start-prod": "concurrently \"npm run start-frontend-prod\" \"npm run start-backend\"",
+    "start-frontend": "cd frontend && npm run dev",
+    "start-frontend-prod": "cd frontend && node build/index.js",
+    "start-backend": "cd backend && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
