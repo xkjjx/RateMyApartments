@@ -18,7 +18,7 @@
 <h1>Apartments in {name.name}:</h1>
     
     {#each apartments as apartment}
-        <a href="/apartment/{apartment.id}">
+        <a href="/apartments/{apartment.id}">
             <h2>{apartment.name}</h2>
         </a>
         <p>{apartment.description}</p>

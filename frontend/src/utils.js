@@ -9,3 +9,9 @@ export const getAreaName = async (areaId) => {
     const data = await response.json();
     return data;
 }
+
+export const getApartmentInformation = async (apartmentId) => {
+    const response = await fetch(`http://localhost:3000/apartments/${apartmentId}/info`);
+    const data = await response.json();
+    return data;
+}
