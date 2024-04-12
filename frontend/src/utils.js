@@ -15,3 +15,9 @@ export const getApartmentInformation = async (apartmentId) => {
     const data = await response.json();
     return data;
 }
+
+export const getAreas = async () => {
+    const response = await fetch('http://localhost:3000/areas');
+    const data = await response.json();
+    return data;
+}

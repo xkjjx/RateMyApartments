@@ -44,7 +44,6 @@ const getApartmentsInArea = (request, response) => {
             response.status(400).send(`Error: ${error}`);
         }
         const apartmentId = parseInt(results.rows[0].apartment_id);
-        console.log(apartmentId);
         pool.query('SELECT * FROM apartments WHERE id = $1', [apartmentId], (error, results) => {
             if (error) {
                 response.status(400).send(`Error: ${error}`);
