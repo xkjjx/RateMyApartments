@@ -54,8 +54,19 @@ const getApartmentsInArea = (request, response) => {
     })
 }
 
+const getAreaName = (request, response) => {
+    const areaId = parseInt(request.params.id);
 
-module.exports = { addArea, getAreas, getApartmentsInArea }
+    pool.query('SELECT name FROM area WHERE id = $1', [areaId], (error, results) => {
+        if (error) {
+            response.status(400).send(`Error: ${error}`);
+        }
+        response.status(200).json(results.rows[0]);
+    })
+}
+
+
+module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName }
 
 
 

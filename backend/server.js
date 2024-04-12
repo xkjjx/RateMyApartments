@@ -27,3 +27,4 @@ app.listen(port, () => {
 app.post('/areas', db.addArea)
 app.get('/areas', db.getAreas)
 app.get('/areas/:id/apartments', db.getApartmentsInArea)
+app.get('/areas/:id/name', db.getAreaName)
