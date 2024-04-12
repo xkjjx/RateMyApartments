@@ -32,12 +32,11 @@ CREATE TABLE users (
 CREATE TABLE reviews (
     id SERIAL PRIMARY KEY,
     apartment_id INT,
-    area_id INT,
     user_id INT,
     title VARCHAR(255),
+    rating INT CHECK (rating >= 1 AND rating <= 5),
     content TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (apartment_id) REFERENCES apartments(id),
-    FOREIGN KEY (area_id) REFERENCES area(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

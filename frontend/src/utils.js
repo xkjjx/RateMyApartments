@@ -21,3 +21,14 @@ export const getAreas = async () => {
     const data = await response.json();
     return data;
 }
+
+export const postReview = async (review) => {
+    const response = await fetch('http://localhost:3000/reviews', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(review),
+    });
+    return response;
+}

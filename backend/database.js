@@ -75,8 +75,18 @@ const getApartmentInformation = (request, response) => {
     })
 }
 
+const addReview = (request, response) => {
+    const { apartment_id, rating, review, user_id, title } = request.body;
 
-module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName, getApartmentInformation }
+    pool.query('INSERT INTO reviews (apartment_id, rating, content, user_id, title) VALUES ($1, $2, $3, $4, $5)', [apartment_id, rating, review, user_id, title], (error, results) => {
+        if (error) {
+            response.status(400).send(`Error: ${error}`);
+        }
+        response.status(201);
+    })
+}
+
+module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName, getApartmentInformation, addReview }
 
 
 
