@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import Cookies from 'js-cookie';
-    import { validateToken, getUserNameById } from '../utils';
+    import { validateToken, getUserNameById, logout } from '../utils';
     
     let navItems = [
         { name: 'Home', path: '/' },
@@ -23,6 +23,12 @@
             });
         }
     });
+
+    async function logoutFrontend(){
+        await logout();
+        Cookies.remove('session_token');
+        window.location.href = '/';
+    }
 </script>
 
 <nav class="nav">
@@ -31,7 +37,7 @@
     {/each}
     {#if userName}
         <span>Hello, {userName}!</span>
-        <button on:click={() => goto('/')}>Logout</button>
+        <button on:click={logoutFrontend}>Logout</button>
     {:else}
         <button on:click={() => goto('/loginview')}>Login</button>
     {/if}

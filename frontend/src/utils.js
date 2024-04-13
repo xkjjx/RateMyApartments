@@ -51,6 +51,14 @@ export const login = async (username, password) => {
     return response;
 }
 
+export const logout = async () => {
+    const response = await fetch('http://localhost:3000/logout', {
+        method: 'POST',
+        credentials: 'include'
+    });
+    return response;
+}
+
 export const validateToken = async () => {
     const response = await fetch('http://localhost:3000/validateToken',
         {
