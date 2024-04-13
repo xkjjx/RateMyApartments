@@ -29,6 +29,7 @@ export const postReview = async (review) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(review),
+        credentials: 'include'
     });
     return response;
 }

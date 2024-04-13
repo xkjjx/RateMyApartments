@@ -75,10 +75,29 @@ const getApartmentInformation = (request, response) => {
     })
 }
 
-const addReview = (request, response) => {
-    const { apartment_id, rating, review, user_id, title } = request.body;
+const addReview = async (request, response) => {
+    const { apartment_id, rating, review, title } = request.body;
 
-    pool.query('INSERT INTO reviews (apartment_id, rating, content, user_id, title) VALUES ($1, $2, $3, $4, $5)', [apartment_id, rating, review, user_id, title], (error, results) => {
+    let userId = -1;
+
+    const sessionToken = request.cookies.session_token;
+    if (!sessionToken) {
+        response.status(401).send('No access token provided. Please log in.');
+        return;
+    }
+    else{
+        const results = await pool.query('SELECT user_id FROM sessions WHERE token = $1 AND expires_at > NOW()', [sessionToken]);
+        if(results.rows.length > 0){
+            userId = results.rows[0].user_id;
+        }
+        else{
+            response.status(401).send('Access token expired or invalid. Please log in again.');
+            return;
+        }
+    }
+
+
+    pool.query('INSERT INTO reviews (apartment_id, rating, content, user_id, title) VALUES ($1, $2, $3, $4, $5)', [apartment_id, rating, review, userId, title], (error, results) => {
         if (error) {
             response.status(400).send(`Error: ${error}`);
         }
