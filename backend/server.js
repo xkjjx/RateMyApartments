@@ -3,7 +3,10 @@ const app = express();
 const port = 3000;
 const db = require('./database.js')
 const cors = require('cors')
+const auth = require('./login.js')
+const cookieParser = require('cookie-parser');
 
+app.use(cookieParser());
 app.use(cors())
 app.use(express.json())
 
@@ -31,3 +34,6 @@ app.get('/areas/:id/name', db.getAreaName)
 app.get('/apartments/:id/info', db.getApartmentInformation)
 app.post('/reviews', db.addReview)
 app.get('/reviews/:id', db.getReviews)
+
+app.post('/login', auth.login)
+app.post('/logout', auth.logout)

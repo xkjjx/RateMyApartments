@@ -25,7 +25,18 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
     email VARCHAR(255),
-    verified BOOLEAN DEFAULT FALSE
+    verified BOOLEAN DEFAULT FALSE,
+    password VARCHAR(255),
+    admin BOOLEAN DEFAULT FALSE,
+);
+
+CREATE TABLE sessions (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    token VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- Create the 'reviews' table with foreign keys referencing 'apartments', 'area', and 'users' tables

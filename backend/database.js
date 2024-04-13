@@ -1,6 +1,6 @@
-const { response, json } = require('express')
-const Pool = require('pg').Pool
-require('dotenv').config()
+const { response, json } = require('express');
+const Pool = require('pg').Pool;
+require('dotenv').config();
 
 const pool = new Pool({
     host: 'localhost',
@@ -8,13 +8,13 @@ const pool = new Pool({
     database: 'ratemyapartment',
     user: 'kjj',
     password: "npc"
-})
+});
 
 const closePool = () => {
     pool.end();
-}
+};
 
-module.exports = { pool, closePool }
+module.exports = { pool, closePool };
 
 const addArea = (request, response) => {
     const name = request.body.name;
@@ -25,7 +25,7 @@ const addArea = (request, response) => {
         }
         response.status(201).send(`Area added with ID: ${results.insertId}`);
     })
-}
+};
 
 const getAreas = (request, response) => {
     pool.query('SELECT * FROM area', (error, results) => {
@@ -34,7 +34,7 @@ const getAreas = (request, response) => {
         }
         response.status(200).json(results.rows);
     })
-}
+};
 
 const getApartmentsInArea = (request, response) => {
     const areaId = parseInt(request.params.id);
@@ -97,7 +97,51 @@ const getReviews = (request, response) => {
     })
 }
 
-module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName, getApartmentInformation, addReview, getReviews }
+async function getUserId(username) {
+    try {
+        const results = await pool.query('SELECT id FROM users WHERE email = $1', [username]);
+        if (results.rows.length > 0) {
+            return results.rows[0].id;
+        } else {
+            return -1; // or throw an error, or handle the absence of a user as you see fit
+        }
+    } catch (error) {
+        console.error('Error querying database', error);
+        return -1; // or throw an error
+    }
+}
+
+async function storeSession(token, userId, expiresAt) {
+    return pool.query(
+        'INSERT INTO sessions (token, user_id, expires_at) VALUES ($1, $2, $3) RETURNING id',
+        [token, userId, expiresAt]
+    );
+}
+
+async function findSession(token) {
+    return pool.query(
+        'SELECT * FROM sessions WHERE token = $1 AND expires_at > NOW()',
+        [token]
+    );
+}
+
+async function deleteSession(token) {
+    return pool.query(
+        'DELETE FROM sessions WHERE token = $1',
+        [token]
+    );
+}
+
+function validateCredentials(username, password){
+    return true;
+    //TODO: Implement this function
+}
+
+
+
+
+
+module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName, getApartmentInformation, addReview, getReviews, getUserId, storeSession, findSession, deleteSession, validateCredentials}
 
 
 
