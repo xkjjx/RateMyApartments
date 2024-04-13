@@ -64,3 +64,9 @@ export const validateToken = async () => {
         return -1;
     }
 }
+
+export const getUserNameById = async (userId) => {
+    const response = await fetch(`http://localhost:3000/users/${userId}`);
+    const data = await response.json().then(data => data.name);
+    return data;
+}

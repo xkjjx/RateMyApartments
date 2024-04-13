@@ -1,4 +1,4 @@
-const { response, json } = require('express');
+const { response, json, request } = require('express');
 const Pool = require('pg').Pool;
 require('dotenv').config();
 
@@ -97,6 +97,17 @@ const getReviews = (request, response) => {
     })
 }
 
+const getUserNameById = (request, response) => {
+    const userId = parseInt(request.params.id);
+
+    pool.query('SELECT name FROM users WHERE id = $1', [userId], (error, results) => {
+        if (error) {
+            response.status(400).send(`Error: ${error}`);
+        }
+        response.status(200).json(results.rows[0]);
+    })
+}
+
 async function getUserId(username) {
     try {
         const results = await pool.query('SELECT id FROM users WHERE email = $1', [username]);
@@ -161,7 +172,7 @@ const validateTokenAndReturnUserId = async (session_id, response) => {
 
 
 
-module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName, getApartmentInformation, addReview, getReviews, getUserId, storeSession, findSession, deleteSession, validateCredentials, validateTokenAndReturnUserId}
+module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName, getApartmentInformation, addReview, getReviews, getUserId, storeSession, findSession, deleteSession, validateCredentials, validateTokenAndReturnUserId, getUserNameById, closePool}
 
 
 

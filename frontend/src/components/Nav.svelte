@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import Cookies from 'js-cookie';
-    import { validateToken } from '../utils';
+    import { validateToken, getUserNameById } from '../utils';
     
     let navItems = [
         { name: 'Home', path: '/' },
@@ -16,10 +16,10 @@
         let sessionToken = Cookies.get('session_token');
         console.log(sessionToken);
         if (sessionToken){
-            validateToken().then((userIdReponse) => {
-                if (userIdReponse != -1){
-                    userName = userIdReponse;
-                } 
+            validateToken().then(async (userIdResponse) => {
+                if (userIdResponse !== -1) {
+                    userName = await getUserNameById(userIdResponse);
+                }
             });
         }
     });
