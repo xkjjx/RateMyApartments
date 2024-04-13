@@ -11,16 +11,21 @@ const login = async (req, res) => {
     if (db.validateCredentials(username, password)) {
         const token = uuidv4();
         let userId = await db.getUserId(username);
-        await db.storeSession(token, userId, new Date(Date.now() + 86400000)); // 24 hour expiration
-        res.cookie('session_token', token); // Send token as cookie
-        res.redirect('/');
+        if (userId === -1) {
+            res.status(400).send('User not found');
+        }
+        else{
+            await db.storeSession(token, userId, new Date(Date.now() + 86400000)); // 24 hour expiration
+            res.status(200);
+            res.cookie('session_token', token); // Send token as cookie
+            res.redirect('/');
+        }
     } else {
         res.send('Login Failed!');
     }
 };
 
 const logout = async (req, res) => {
-    //console.log(req.cookies);
     const token = req.cookies.session_token;
 
     if (!token) {

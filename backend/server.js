@@ -7,7 +7,12 @@ const auth = require('./login.js')
 const cookieParser = require('cookie-parser');
 
 app.use(cookieParser());
-app.use(cors())
+const corsOptions = {
+  origin: 'http://localhost:5173', // Change this to match your frontend's origin
+  credentials: true, // This allows cookies to be sent with the request
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions))
 app.use(express.json())
 
 require('dotenv').config()
@@ -34,6 +39,7 @@ app.get('/areas/:id/name', db.getAreaName)
 app.get('/apartments/:id/info', db.getApartmentInformation)
 app.post('/reviews', db.addReview)
 app.get('/reviews/:id', db.getReviews)
+app.get('/validateToken', (req, res) => db.validateTokenAndReturnUserId(req.cookies.session_token, res))
 
 app.post('/login', auth.login)
 app.post('/logout', auth.logout)

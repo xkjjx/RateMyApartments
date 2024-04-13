@@ -118,16 +118,16 @@ async function storeSession(token, userId, expiresAt) {
     );
 }
 
-async function findSession(token) {
+async function deleteSession(token) {
     return pool.query(
-        'SELECT * FROM sessions WHERE token = $1 AND expires_at > NOW()',
+        'DELETE FROM sessions WHERE token = $1',
         [token]
     );
 }
 
-async function deleteSession(token) {
+async function findSession(token) {
     return pool.query(
-        'DELETE FROM sessions WHERE token = $1',
+        'SELECT * FROM sessions WHERE token = $1 AND expires_at > NOW()',
         [token]
     );
 }
@@ -137,11 +137,31 @@ function validateCredentials(username, password){
     //TODO: Implement this function
 }
 
+const validateTokenAndReturnUserId = async (session_id, response) => {
+    if(!session_id){
+        response.status(401).send('Unauthorized');
+    }
+    else{
+        try{
+            const results = await pool.query('SELECT user_id FROM sessions WHERE token = $1 AND expires_at > NOW()', [session_id]);
+            if(results.rows.length > 0){
+                response.status(200).json(results.rows[0].user_id);
+            }
+            else{
+                response.status(401).send('Unauthorized');
+            }
+        }
+        catch(error){
+            console.error('Error querying database', error);
+            response.status(500).send('Internal Server Error');
+        }
+    }
+}
 
 
 
 
-module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName, getApartmentInformation, addReview, getReviews, getUserId, storeSession, findSession, deleteSession, validateCredentials}
+module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName, getApartmentInformation, addReview, getReviews, getUserId, storeSession, findSession, deleteSession, validateCredentials, validateTokenAndReturnUserId}
 
 
 
