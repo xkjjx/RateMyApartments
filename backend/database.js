@@ -101,7 +101,7 @@ const addReview = async (request, response) => {
         if (error) {
             response.status(400).send(`Error: ${error}`);
         }
-        response.status(201);
+        response.status(200);
     })
 }
 
@@ -162,9 +162,20 @@ async function findSession(token) {
     );
 }
 
-function validateCredentials(username, password){
-    return true;
-    //TODO: Implement this function
+async function validateCredentials(username, password){
+    try{
+        const results = await pool.query('SELECT id FROM users WHERE email = $1 AND password = $2', [username, password]);
+        if(parseInt(results.rowCount) > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    catch(error){
+        console.error('Error querying database', error);
+        return false;
+    }
 }
 
 const validateTokenAndReturnUserId = async (session_id, response) => {

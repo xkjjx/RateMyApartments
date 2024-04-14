@@ -20,6 +20,9 @@
                 if (userIdResponse !== -1) {
                     userName = await getUserNameById(userIdResponse);
                 }
+                else{
+                    Cookies.remove('session_token');
+                }
             });
         }
     });

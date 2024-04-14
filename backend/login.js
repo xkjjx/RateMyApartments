@@ -8,20 +8,15 @@ const { parse } = require('dotenv');
 
 const login = async (req, res) => {
     const { username, password } = req.body;
-    if (db.validateCredentials(username, password)) {
+    if (await db.validateCredentials(username, password)) {
         const token = uuidv4();
         let userId = await db.getUserId(username);
-        if (userId === -1) {
-            res.status(400).send('User not found');
-        }
-        else{
-            await db.storeSession(token, userId, new Date(Date.now() + 86400000)); // 24 hour expiration
-            res.status(200);
-            res.cookie('session_token', token); // Send token as cookie
-            res.redirect('/');
-        }
+        await db.storeSession(token, userId, new Date(Date.now() + 86400000)); // 24 hour expiration
+        res.status(200);
+        res.cookie('session_token', token); // Send token as cookie
+        res.redirect('/');
     } else {
-        res.send('Login Failed!');
+        res.status(400).send('Login Failed!');
     }
 };
 
