@@ -2,12 +2,16 @@ const { response, json, request } = require('express');
 const Pool = require('pg').Pool;
 require('dotenv').config();
 
+
 const pool = new Pool({
-    host: 'localhost',
+    host: 'ep-young-night-a5728mqv.us-east-2.aws.neon.tech',
+    database: 'maindb',
+    user: 'maindb_owner',
     port: 5432,
-    database: 'ratemyapartment',
-    user: 'kjj',
-    password: "npc"
+    ssl: {
+        rejectUnauthorized: false
+    },
+    password: process.env.PGPASSWORD,
 });
 
 const closePool = () => {

@@ -27,7 +27,7 @@ CREATE TABLE users (
     email VARCHAR(255),
     verified BOOLEAN DEFAULT FALSE,
     password VARCHAR(255),
-    admin BOOLEAN DEFAULT FALSE,
+    admin BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE sessions (
