@@ -133,6 +133,17 @@ const getUserNameById = (request, response) => {
     })
 }
 
+const addUser = (request, response) => {
+    const { email, password, name } = request.body;
+
+    pool.query('INSERT INTO users (email, password, name) VALUES ($1, $2, $3) RETURNING id', [email, password, name], (error, results) => {
+        if (error) {
+            response.status(400).send(`Error: ${error}`);
+        }
+        response.status(201).json(results.rows[0]);
+    })
+}
+
 async function getUserId(username) {
     try {
         const results = await pool.query('SELECT id FROM users WHERE email = $1', [username]);
@@ -208,7 +219,23 @@ const validateTokenAndReturnUserId = async (session_id, response) => {
 
 
 
-module.exports = { addArea, getAreas, getApartmentsInArea, getAreaName, getApartmentInformation, addReview, getReviews, getUserId, storeSession, findSession, deleteSession, validateCredentials, validateTokenAndReturnUserId, getUserNameById, closePool}
+module.exports = 
+{ addArea,
+     getAreas,
+      getApartmentsInArea,
+       getAreaName,
+        getApartmentInformation,
+         addReview,
+          getReviews,
+          getUserId,
+           storeSession,
+           findSession,
+            deleteSession,
+            validateCredentials,
+             validateTokenAndReturnUserId,
+              getUserNameById,
+               closePool,
+               addUser}
 
 
 
