@@ -41,10 +41,11 @@
             "review": review,
             "apartment_id": id
         }
-        let response = (await postReview(request)).json();
-        if(response.status == 200){
+        let response = await postReview(request);
+        if(response != -1){
             reviews = await getReviews(id);
-        } else {
+        }
+        else{
             alert("Failed to add review");
         }
     }

@@ -97,11 +97,13 @@ const addReview = async (request, response) => {
     }
 
 
-    pool.query('INSERT INTO reviews (apartment_id, rating, content, user_id, title) VALUES ($1, $2, $3, $4, $5)', [apartment_id, rating, review, userId, title], (error, results) => {
+    pool.query('INSERT INTO reviews (apartment_id, rating, content, user_id, title) VALUES ($1, $2, $3, $4, $5) RETURNING id', [apartment_id, rating, review, userId, title], (error, results) => {
         if (error) {
             response.status(400).send(`Error: ${error}`);
         }
-        response.status(200);
+        else{
+            response.json(results.rows[0]);
+        }
     })
 }
 

@@ -23,21 +23,32 @@ export const getAreas = async () => {
 }
 
 export const postReview = async (review) => {
-    const response = await fetch('http://localhost:3000/reviews', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(review),
-        credentials: 'include'
-    });
-    return response;
+    // try {
+        const response = await fetch('http://localhost:3000/reviews', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(review),
+            credentials: 'include'
+        });
+        if (response.status === 200) {
+            return await response.json();
+        } else {
+            return -1;
+        }
+    // } catch (error) {
+    //     console.error('Error posting review:', error);
+    //     return -1; // Or handle the error differently as needed
+    // }
 }
+
 
 export const getReviews = async (apartmentId) => {
     const response = await fetch(`http://localhost:3000/reviews/${apartmentId}`);
     const data = await response.json();
     return data;
+
 }
 
 export const login = async (username, password) => {

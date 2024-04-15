@@ -11,7 +11,6 @@
     onMount(async () => {
         apartments = await getApartmentsInArea(id);
         name = await getAreaName(id);
-        page.set({ apartments });
     });
 </script>
 
