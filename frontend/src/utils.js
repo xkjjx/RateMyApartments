@@ -90,3 +90,14 @@ export const getUserNameById = async (userId) => {
     const data = await response.json().then(data => data.name);
     return data;
 }
+
+export const addUser = async (email, password, name) => {
+    const response = await fetch('http://localhost:3000/user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, name }),
+    });
+    return response;
+}

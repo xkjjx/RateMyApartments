@@ -43,6 +43,7 @@
         <button on:click={logoutFrontend}>Logout</button>
     {:else}
         <button on:click={() => goto('/loginview')}>Login</button>
+        <button on:click={() => goto('/newaccount')}>Register</button>
     {/if}
 </nav>
 
