@@ -1,7 +1,7 @@
 <script>
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
-    import { addApartment, getApartmentsInArea } from '../../../utils.js'
+    import { addApartment, getApartmentsInArea, deleteApartment } from '../../../utils.js'
     import { getAreaName } from '../../../utils.js'
 
 
@@ -40,6 +40,11 @@
     async function addApartmentFirst(){
         addApartmentMode = true;
     }
+
+    async function deleteApartmentFrontend(apartment_id){
+        await deleteApartment(apartment_id);
+        apartments = await getApartmentsInArea(id);
+    }
 </script>
 
 <h1>Apartments in {name.name}:</h1>
@@ -49,6 +54,15 @@
             <h2>{apartment.name}</h2>
         </a>
         <p>{apartment.description}</p>
+        <a href={apartment.google_maps_link}>
+            Google Maps
+        </a>
+        <a href={apartment.apple_maps_link}>
+            Apple Maps
+        </a>
+        {#if isAdmin}
+            <button on:click={deleteApartmentFrontend(apartment.id)}>Delete</button>
+        {/if}
     {/each}
 
 {#if isAdmin}

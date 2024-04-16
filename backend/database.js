@@ -165,7 +165,6 @@ const getUserInformationByUsername = async (request, response) => {
     try {
         const results = await pool.query('SELECT * FROM users WHERE email = $1', [username]);
         if (results.rows.length > 0) {
-            console.log(results.rows[0]);
             response.json(results.rows[0]);
         } else {
             response.status(404).send('User not found');
@@ -180,12 +179,14 @@ const deleteApartment = async (request, response) => {
     const id = request.params.id;
     pool.query('DELETE FROM apartments where id = $1',[id],(error,results) => {
         if(error){
+            console.log(error);
             response.status(400).send(`Error: ${error}`)
         }
         else{
             response.sendStatus(200)
         }
     })
+    //TODO - ensure user has admin status
 }
 
 

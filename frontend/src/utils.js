@@ -102,13 +102,20 @@ export const addUser = async (email, password, name) => {
     return response;
 }
 
-export const addApartment = async (name, address, description, gmaplink, apmaplink, area_id) => {
+export const addApartment = async (name, address, description, google_maps_link, apple_maps_link, area_id) => {
     const response = await fetch('http://localhost:3000/apartments', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, address, description, gmaplink, apmaplink, area_id }),
+        body: JSON.stringify({ name, address, description, google_maps_link, apple_maps_link, area_id }),
+    });
+    return response;
+}
+
+export const deleteApartment = async (apartmentId) => {
+    const response = await fetch(`http://localhost:3000/apartments/${apartmentId}`, {
+        method: 'DELETE',
     });
     return response;
 }

@@ -11,12 +11,14 @@ CREATE TABLE apartments (
     address VARCHAR(255),
     description TEXT,
     google_maps_link VARCHAR(255),
-    apple_maps_link VARCHAR(255)
+    apple_maps_link VARCHAR(255),
+    area_id INT,
+    FOREIGN KEY (area_id) REFERENCES area(id)
 );
 
 -- Create the 'users' table
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY DEFAULT 0,
     name VARCHAR(255),
     email VARCHAR(255),
     verified BOOLEAN DEFAULT FALSE,
@@ -30,18 +32,18 @@ CREATE TABLE sessions (
     token VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     expires_at TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Create the 'reviews' table with foreign keys referencing 'apartments', 'area', and 'users' tables
 CREATE TABLE reviews (
     id SERIAL PRIMARY KEY,
     apartment_id INT,
-    user_id INT,
+    user_id INT DEFAULT 0,
     title VARCHAR(255),
     rating INT CHECK (rating >= 1 AND rating <= 5),
     content TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (apartment_id) REFERENCES apartments(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (apartment_id) REFERENCES apartments(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET DEFAULT
 );
