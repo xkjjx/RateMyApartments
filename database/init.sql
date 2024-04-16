@@ -9,15 +9,9 @@ CREATE TABLE apartments (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
     address VARCHAR(255),
-    description TEXT
-);
-
--- Create the 'area_apartments' table with foreign keys referencing 'area' and 'apartments' tables
-CREATE TABLE area_apartments (
-    area_id INT,
-    apartment_id INT,
-    FOREIGN KEY (area_id) REFERENCES area(id),
-    FOREIGN KEY (apartment_id) REFERENCES apartments(id)
+    description TEXT,
+    google_maps_link VARCHAR(255),
+    apple_maps_link VARCHAR(255)
 );
 
 -- Create the 'users' table

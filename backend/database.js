@@ -43,24 +43,23 @@ const getAreas = (request, response) => {
 const getApartmentsInArea = (request, response) => {
     const areaId = parseInt(request.params.id);
 
-    pool.query('SELECT * FROM area_apartments WHERE area_id = $1', [areaId], (error, results) => {
+    const query = `SELECT * FROM apartments where area_id = $1;
+    `;
+
+    pool.query(query, [areaId], (error, results) => {
         if (error) {
             response.status(400).send(`Error: ${error}`);
-        }
-        const apartmentId = parseInt(results.rows[0].apartment_id);
-        pool.query('SELECT * FROM apartments WHERE id = $1', [apartmentId], (error, results) => {
-            if (error) {
-                response.status(400).send(`Error: ${error}`);
-            }
+        } else {
             response.status(200).json(results.rows);
-        })
-    })
+        }
+    });
 }
 
-const addApartment = (request, response) => {
-    const { name, address, description } = request.body;
 
-    pool.query('INSERT INTO apartments (name, address, description) VALUES ($1, $2, $3) RETURNING id', [name, address, description], (error, results) => {
+const addApartment = (request, response) => {
+    const { name, address, description, google_maps_link, apple_maps_link } = request.body;
+
+    pool.query('INSERT INTO apartments (name, address, description, google_maps_link, apple_maps_link) VALUES ($1, $2, $3) RETURNING id', [name, address, description, google_maps_link, apple_maps_link], (error, results) => {
         if (error) {
             response.status(400).send(`Error: ${error}`);
         }
