@@ -57,6 +57,17 @@ const getApartmentsInArea = (request, response) => {
     })
 }
 
+const addApartment = (request, response) => {
+    const { name, address, description } = request.body;
+
+    pool.query('INSERT INTO apartments (name, address, description) VALUES ($1, $2, $3) RETURNING id', [name, address, description], (error, results) => {
+        if (error) {
+            response.status(400).send(`Error: ${error}`);
+        }
+        response.status(201).json(results.rows[0]);
+    })
+}
+
 const getAreaName = (request, response) => {
     const areaId = parseInt(request.params.id);
 
@@ -235,7 +246,8 @@ module.exports =
              validateTokenAndReturnUserId,
               getUserNameById,
                closePool,
-               addUser}
+               addUser,
+            addApartment}
 
 
 
