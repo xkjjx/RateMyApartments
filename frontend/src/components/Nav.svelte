@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import Cookies from 'js-cookie';
-    import { validateToken, getUserNameById, logout } from '../utils';
+    import { validateToken, getUserNameById, logout, clearLocalStorage } from '../utils';
     
     let navItems = [
         { name: 'Home', path: '/' },
@@ -14,7 +14,6 @@
 
     onMount(() => {
         let sessionToken = Cookies.get('session_token');
-        console.log(sessionToken);
         if (sessionToken){
             validateToken().then(async (userIdResponse) => {
                 if (userIdResponse !== -1) {
@@ -22,6 +21,7 @@
                 }
                 else{
                     Cookies.remove('session_token');
+                    clearLocalStorage();
                 }
             });
         }
@@ -30,6 +30,7 @@
     async function logoutFrontend(){
         await logout();
         Cookies.remove('session_token');
+        clearLocalStorage();
         window.location.href = '/';
     }
 </script>

@@ -112,3 +112,39 @@ export const addApartment = async (name, address, description, gmaplink, apmapli
     });
     return response;
 }
+
+export const setLocalStorageWithUsernameValues = async (username) => {
+    try {
+        let response = await fetch(`http://localhost:3000/users/username/${username}`).catch(error => {
+            console.error('Failed to fetch user data:', error);
+            // Handle errors e.g., show a user notification, log to an error reporting service, etc.
+        });
+
+        console.log(response);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Check if the necessary data fields are present
+        if (data.name && data.email && data.id && typeof data.admin !== 'undefined' && typeof data.verified !== 'undefined') {
+            localStorage.setItem('username', data.name);
+            localStorage.setItem('email', data.email);
+            localStorage.setItem('id', data.id);
+            localStorage.setItem('isAdmin', data.admin.toString());
+            localStorage.setItem('isVerified', data.verified.toString());
+        } else {
+            throw new Error('Missing required user data fields');
+        }  
+    } catch (error) {
+        console.error('Failed to fetch user data:', error);
+        // Handle errors e.g., show a user notification, log to an error reporting service, etc.
+    }
+}
+
+
+export const clearLocalStorage = () => {
+    localStorage.clear();
+}

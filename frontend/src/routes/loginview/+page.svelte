@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { login } from '../../utils'
+    import { login,setLocalStorageWithUsernameValues, clearLocalStorage } from '../../utils'
 
     let loginFailed = false;
     async function loginFrontend() {
@@ -9,8 +9,8 @@
         let response = await login(username, password);
         document.querySelector('input[type="text"]').value = '';
         document.querySelector('input[type="password"]').value = '';
-        console.log(response)
         if(response.status == 200){
+            await setLocalStorageWithUsernameValues(username);
             window.location.href = '/';
         } else {
             loginFailed = true;

@@ -63,8 +63,12 @@ const addApartment = (request, response) => {
         if (error) {
             response.status(400).send(`Error: ${error}`);
         }
-        response.status(201).json(results.rows[0]);
+        else{
+            response.json(results.rows[0]);
+        }
     })
+
+    //TODO - ensure request is coming from admin user
 }
 
 const getAreaName = (request, response) => {
@@ -153,6 +157,23 @@ const addUser = (request, response) => {
         response.status(201).json(results.rows[0]);
     })
 }
+
+const getUserInformationByUsername = async (request, response) => {
+    const username = request.params.username;
+    try {
+        const results = await pool.query('SELECT * FROM users WHERE email = $1', [username]);
+        if (results.rows.length > 0) {
+            console.log(results.rows[0]);
+            response.json(results.rows[0]);
+        } else {
+            response.status(404).send('User not found');
+        }
+    } catch (error) {
+        console.error('Error querying database', error);
+        response.status(500).send('Internal Server Error');
+    }
+}
+
 
 async function getUserId(username) {
     try {
@@ -246,7 +267,8 @@ module.exports =
               getUserNameById,
                closePool,
                addUser,
-            addApartment}
+            addApartment,
+            getUserInformationByUsername}
 
 
 
