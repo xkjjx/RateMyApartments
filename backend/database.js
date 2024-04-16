@@ -154,7 +154,9 @@ const addUser = (request, response) => {
         if (error) {
             response.status(400).send(`Error: ${error}`);
         }
-        response.status(201).json(results.rows[0]);
+        else{
+            response.status(201).json(results.rows[0]);
+        }
     })
 }
 
@@ -172,6 +174,18 @@ const getUserInformationByUsername = async (request, response) => {
         console.error('Error querying database', error);
         response.status(500).send('Internal Server Error');
     }
+}
+
+const deleteApartment = async (request, response) => {
+    const id = request.params.id;
+    pool.query('DELETE FROM apartments where id = $1',[id],(error,results) => {
+        if(error){
+            response.status(400).send(`Error: ${error}`)
+        }
+        else{
+            response.sendStatus(200)
+        }
+    })
 }
 
 
@@ -268,7 +282,8 @@ module.exports =
                closePool,
                addUser,
             addApartment,
-            getUserInformationByUsername}
+            getUserInformationByUsername,
+        deleteApartment}
 
 
 
