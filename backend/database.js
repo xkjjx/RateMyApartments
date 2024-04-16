@@ -57,9 +57,9 @@ const getApartmentsInArea = (request, response) => {
 
 
 const addApartment = (request, response) => {
-    const { name, address, description, google_maps_link, apple_maps_link } = request.body;
+    const { name, address, description, google_maps_link, apple_maps_link , area_id} = request.body;
 
-    pool.query('INSERT INTO apartments (name, address, description, google_maps_link, apple_maps_link) VALUES ($1, $2, $3) RETURNING id', [name, address, description, google_maps_link, apple_maps_link], (error, results) => {
+    pool.query('INSERT INTO apartments (name, address, description, google_maps_link, apple_maps_link, area_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', [name, address, description, google_maps_link, apple_maps_link, area_id], (error, results) => {
         if (error) {
             response.status(400).send(`Error: ${error}`);
         }
