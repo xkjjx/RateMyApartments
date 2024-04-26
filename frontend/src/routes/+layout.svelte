@@ -1,8 +1,7 @@
 <script>
     import Nav from '../components/Nav.svelte';
+    import 'bootstrap/dist/css/bootstrap.min.css';
 </script>
 
-<nav class="nav">
-    <Nav />
-    <slot />
-</nav>
+<Nav />
+<slot />

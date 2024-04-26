@@ -4,11 +4,15 @@
     import { getApartmentInformation, postReview, getReviews } from '../../../utils.js'
     import { get } from 'svelte/store';
     import Cookies from 'js-cookie';
+    import ReviewCards from '../../../components/ReviewCards.svelte';
 
     const id = $page.params.apartment; 
 
     let info = {"name":""};
     let reviews = [];
+    let newTitle = "";
+    let newRating = "";
+    let newContent = "";
 
     onMount(async () => {
         info = await getApartmentInformation(id);
@@ -21,16 +25,12 @@
             alert("Please log in to add a review");
             return;
         }
-        // let name = document.querySelector('input[placeholder="Name"]').value;
-        // let email = document.querySelector('input[placeholder="Email"]').value;
-        let title = document.querySelector('input[placeholder="Title"]').value;
-        let rating = document.querySelector('input[placeholder="Rating"]').value;
-        let review = document.querySelector('textarea').value;
-        // document.querySelector('input[placeholder="Name"]').value = "";
-        // document.querySelector('input[placeholder="Email"]').value = "";
-        document.querySelector('input[placeholder="Title"]').value = "";
-        document.querySelector('input[placeholder="Rating"]').value = "";
-        document.querySelector('textarea').value = "";
+        let title = newTitle;
+        let rating = newRating;
+        let review = newContent;
+        newTitle = "";
+        newRating = "";
+        newContent = "";
         if (title == "" || rating == "" || review == "" || isNaN(rating) || rating < 1 || rating > 5){
             alert("Please fill out all fields correctly");
             return;
@@ -52,27 +52,47 @@
 
 </script>
 
-<h1>{info.name}</h1>
-<p>{info.address}</p>
-<p>{info.description}</p>
-
-<h2>Reviews</h2>
-
-{#each reviews as review}
-    <div>
-        <h3>{review.title}</h3>
-        <p>{review.content}</p>
-        <p>Rating: {review.rating}</p>
-    </div>
-{/each}
-
-<!-- <div>
-    <input type="text" placeholder="Name">
-    <input type="text" placeholder="Email">
-</div> -->
-<div>
-    <input type="text" placeholder="Title">
-    <input type="number" placeholder="Rating">
+<style>
+    .rating {
+      display: inline-flex;
+      direction: rtl; /* Right-to-left to allow filling stars from right to left */
+    }
+    .rating input {
+      display: none; /* Hide the radio button itself */
+    }
+    .rating label {
+      font-size: 1.5rem; /* Larger star icons */
+      color: #fff4d2; /* Gold color for stars */
+      cursor: pointer;
+    }
+    .rating label:hover,
+    .rating label:hover ~ label,
+    .rating input:checked ~ label {
+      color: #e0a800; /* Darker shade when hovered or selected */
+    }
+</style>
+<div class="container mt-5">
+    <h1>{info.name}</h1>
+    <p>{info.address}</p>
+    <p>{info.description}</p>
 </div>
-<textarea rows="4" cols="50"></textarea>
-<button on:click={addReview}>Add Review</button>
+
+<ReviewCards bind:reviews={reviews}/>
+<div class="container mt-5">
+    <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Title" bind:value={newTitle}>
+    </div>
+    <div class="mb-3">
+        <div class="rating">
+            {#each Array(5) as _, i (i)}
+                <input type="radio" id="star{5-i}" name="rating" bind:group={newRating} value={5-i} />
+                <label for="star{5-i}" class="bi bi-star-fill"></label>
+            {/each}
+        </div>
+    </div>
+    <div class="mb-3">
+        <textarea class="form-control" rows="4" placeholder="Enter your review here..." bind:value={newContent}></textarea>
+    </div>
+    <button type="button" class="btn btn-primary" on:click={addReview}>Add Review</button>
+</div>
+

@@ -18,9 +18,22 @@
     }
 </script>
 
-<input type="text" placeholder="Username" />
-<input type="password" placeholder="Password" />
-<button on:click={loginFrontend}>Login</button>
-{#if loginFailed}
-    <p>Login failed</p>
-{/if}
+<div class="container pt-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-3">Please Login</h2>
+            <form>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="Username" />
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" placeholder="Password" />
+                </div>
+                <button type="button" class="btn btn-primary" on:click={loginFrontend}>Login</button>
+            </form>
+            {#if loginFailed}
+                <p class="alert alert-danger mt-2">Login failed</p>
+            {/if}
+        </div>
+    </div>
+</div>
