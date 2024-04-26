@@ -22,7 +22,7 @@
     }
 </script>
 
-<h1>Register</h1>
+<!-- <h1>Register</h1>
 <input type="text" placeholder="Email" />
 <input type="text" placeholder="Name" />
 <input type="password" placeholder="Password" />
@@ -30,4 +30,30 @@
 <button on:click={addUserFrontend}>Register</button>
 {#if accountCreationFailed}
     <p>Account creation failed. Please try again.</p>
-{/if}
+{/if} -->
+
+<div class="container pt-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-3">Register</h2>
+            <form>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="Email" />
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="Full Name" />
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" placeholder="Password" />
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" placeholder="Confirm Password" />
+                </div>
+                <button type="button" class="btn btn-primary" on:click={addUserFrontend}>Create Account</button>
+            </form>
+            {#if accountCreationFailed}
+                <p class="alert alert-danger mt-2">Account creation failed</p>
+            {/if}
+        </div>
+    </div>
+</div>

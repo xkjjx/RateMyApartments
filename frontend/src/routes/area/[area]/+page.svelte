@@ -3,6 +3,7 @@
     import { onMount } from 'svelte';
     import { addApartment, getApartmentsInArea, deleteApartment } from '../../../utils.js'
     import { getAreaName } from '../../../utils.js'
+    import ApartmentCards from '../../../components/ApartmentCards.svelte';
 
 
     const id = $page.params.area; 
@@ -47,29 +48,18 @@
     }
 </script>
 
-<h1>Apartments in {name.name}:</h1>
-    
-    {#each apartments as apartment}
-        <a href="/apartments/{apartment.id}">
-            <h2>{apartment.name}</h2>
-        </a>
-        <p>{apartment.description}</p>
-        <a href={apartment.google_maps_link}>
-            Google Maps
-        </a>
-        <a href={apartment.apple_maps_link}>
-            Apple Maps
-        </a>
-        {#if isAdmin}
-            <button on:click={deleteApartmentFrontend(apartment.id)}>Delete</button>
-        {/if}
-    {/each}
 
-{#if isAdmin}
+<div class="container text-center pt-5">
+    <h1>Apartments in {name.name}</h1>
+    <ApartmentCards apartments={apartments} />
+</div>
+
+
+<!-- {#if isAdmin}
     <button on:click={addApartmentFirst}>Add Apartment</button>
-{/if}
+{/if} -->
 
-{#if addApartmentMode}
+<!-- {#if addApartmentMode}
     <form on:submit|preventDefault={addApartmentFrontend}>
         <input type="text" placeholder="Name" id="name" required>
         <input type="text" placeholder="Description" id="description" required>
@@ -78,4 +68,4 @@
         <input type="text" placeholder="Apple Map Link" id="amap" required>
         <button type="submit">Submit</button>
     </form>
-{/if}
+{/if} -->

@@ -35,16 +35,29 @@
     }
 </script>
 
-<nav class="nav">
-    {#each navItems as { name, path }}
-        <a  href={path} class="nav-item">{name}</a>
-    {/each}
-    {#if userName}
-        <span>Hello, {userName}!</span>
-        <button on:click={logoutFrontend}>Logout</button>
-    {:else}
-        <button on:click={() => goto('/loginview')}>Login</button>
-        <button on:click={() => goto('/newaccount')}>Register</button>
-    {/if}
+<nav class="navbar fixed-top bg-light">
+    <div class="container-fluid">
+        <div class="justify-content-start">
+            <a href="/" class="navbar-brand">Rate My Apartments</a>
+            {#if userName}
+                <span class="navbar-text">Hello, {userName}!</span>
+            {:else}
+                <span class="navbar-text">Guest</span>
+            {/if}
+        </div>
+        <div class="d-flex">
+            {#each navItems as { name, path }}
+                <a href={path} class="btn btn-outline-secondary me-3">{name}</a>
+            {/each}
+            {#if userName}
+                <button on:click={logoutFrontend} class="btn btn-outline-primary me-3">Logout</button>
+            {:else}
+                <button on:click={() => goto('/loginview')} class="btn btn-outline-primary me-3">Login</button>
+                <button on:click={() => goto('/newaccount')} class="btn btn-outline-primary me-3">Register</button>
+            {/if}
+        </div>
+    </div>
 </nav>
+
+
 
