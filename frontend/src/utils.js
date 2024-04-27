@@ -149,6 +149,13 @@ export const setLocalStorageWithUsernameValues = async (username) => {
     }
 }
 
+export const getReviewsByUser = async (userId) => {
+    const response = await fetch(`${env.PUBLIC_BACKEND}/reviews/user/${userId}`);
+    const data = await response.json();
+    console.log(data);
+    return data;
+}
+
 
 export const clearLocalStorage = () => {
     localStorage.clear();

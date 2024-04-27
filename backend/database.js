@@ -136,6 +136,17 @@ const getReviews = (request, response) => {
     })
 }
 
+const getReviewsByUserId = (request, response) => {
+    const userId = parseInt(request.params.id);
+
+    pool.query('SELECT * FROM reviews WHERE user_id = $1', [userId], (error, results) => {
+        if (error) {
+            response.status(400).send(`Error: ${error}`);
+        }
+        response.status(200).json(results.rows);
+    })
+}
+
 const getUserNameById = (request, response) => {
     const userId = parseInt(request.params.id);
 
@@ -284,7 +295,8 @@ module.exports =
                addUser,
             addApartment,
             getUserInformationByUsername,
-        deleteApartment}
+        deleteApartment,
+        getReviewsByUserId}
 
 
 

@@ -41,6 +41,7 @@ app.post('/apartments', db.addApartment)
 app.delete('/apartments/:id',db.deleteApartment)
 app.post('/reviews', db.addReview)
 app.get('/reviews/:id', db.getReviews)
+app.get('/reviews/user/:id', db.getReviewsByUserId)
 app.get('/validateToken', (req, res) => db.validateTokenAndReturnUserId(req.cookies.session_token, res))
 app.get('/users/:id', db.getUserNameById);
 app.post('/user', db.addUser);

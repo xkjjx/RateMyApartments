@@ -77,6 +77,9 @@
     <p>{info.description}</p>
 </div>
 
+<div class="container mt-5">
+    <h2>Reviews</h2>
+</div>
 <ReviewCards bind:reviews={reviews}/>
 <div class="container mt-5">
     <div class="mb-3">
