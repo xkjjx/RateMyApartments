@@ -5,10 +5,11 @@ const db = require('./database.js')
 const cors = require('cors')
 const auth = require('./login.js')
 const cookieParser = require('cookie-parser');
+const hostname = process.env.HOSTNAME || 'localhost';
 
 app.use(cookieParser());
 const corsOptions = {
-  origin: 'http://localhost:5173', // Change this to match your frontend's origin
+  origin: process.env.FRONTEND_URL, // Change this to match your frontend's origin
   credentials: true, // This allows cookies to be sent with the request
   optionsSuccessStatus: 200
 };
@@ -28,7 +29,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.listen(port, () => {
+app.listen(port,hostname, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
 
