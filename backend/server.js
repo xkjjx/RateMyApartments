@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port,hostname, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Example app listening at http://${hostname}:${port}`);
 });
 
 app.post('/areas', db.addArea)

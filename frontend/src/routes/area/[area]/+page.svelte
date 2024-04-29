@@ -22,36 +22,12 @@
         }
     });
 
-    async function addApartmentFrontend(){
-        const name = document.getElementById('name').value;
-        const description = document.getElementById('description').value;
-        const address = document.getElementById('address').value;
-        const gmap = document.getElementById('gmap').value;
-        const amap = document.getElementById('amap').value;
-        document.getElementById('name').value = '';
-        document.getElementById('description').value = '';
-        document.getElementById('address').value = '';
-        document.getElementById('gmap').value = '';
-        document.getElementById('amap').value = '';
-        await addApartment(name, address ,description, gmap, amap, id);
-        apartments = await getApartmentsInArea(id);
-        addApartmentMode = false;
-    }
-
-    async function addApartmentFirst(){
-        addApartmentMode = true;
-    }
-
-    async function deleteApartmentFrontend(apartment_id){
-        await deleteApartment(apartment_id);
-        apartments = await getApartmentsInArea(id);
-    }
 </script>
 
 
 <div class="container text-center pt-5">
     <h1>Apartments in {name.name}</h1>
-    <ApartmentCards apartments={apartments} />
+    <ApartmentCards apartments={apartments} areaId={id}/>
 </div>
 
 
