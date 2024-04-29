@@ -273,6 +273,29 @@ const validateTokenAndReturnUserId = async (session_id, response) => {
     }
 }
 
+const getLeasesByReviewId = async(request, response) => {
+    const reviewId = parseInt(request.params.id);
+
+    pool.query('SELECT * FROM leases WHERE review_id = $1', [reviewId], (error, results) => {
+        if (error) {
+            response.status(400).send(`Error: ${error}`);
+        }
+        response.status(200).json(results.rows);
+    })
+}
+
+const addLease = async(request, response) => {
+    const { review_id, start_date, end_date,rent,water_included,electricity_included,parking_cost,parking_covered,sign_date } = request.body;
+
+    pool.query('INSERT INTO leases (review_id, start_date, end_date, rent, water_included, electricity_included, parking_cost, parking_covered, sign_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id', [review_id, start_date, end_date, rent, water_included, electricity_included, parking_cost, parking_covered, sign_date], (error, results) => {
+        if (error) {
+            response.status(400).send(`Error: ${error}`);
+        }
+        else{
+            response.json(results.rows[0]);
+        }
+    })
+}
 
 
 
@@ -296,7 +319,10 @@ module.exports =
             addApartment,
             getUserInformationByUsername,
         deleteApartment,
-        getReviewsByUserId}
+        getReviewsByUserId,
+        getLeasesByReviewId,
+        addLease
+    }
 
 
 

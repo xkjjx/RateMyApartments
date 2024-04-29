@@ -48,14 +48,16 @@ CREATE TABLE reviews (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET DEFAULT
 );
 
-CREATE TABLE lease (
+CREATE TABLE leases (
     id SERIAL PRIMARY KEY,
     review_id INT,
+    sign_date DATE,
     start_date DATE,
     end_date DATE,
     rent DECIMAL(10, 2),
     water_included BOOLEAN,
     electricity_included BOOLEAN,
     parking_cost DECIMAL(10, 2) DEFAULT NULL,
-    FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE,
+    parking_covered BOOLEAN,
+    FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE
 );

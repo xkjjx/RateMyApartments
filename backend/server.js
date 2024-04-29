@@ -47,7 +47,8 @@ app.get('/validateToken', (req, res) => db.validateTokenAndReturnUserId(req.cook
 app.get('/users/:id', db.getUserNameById);
 app.post('/user', db.addUser);
 app.get('/users/username/:username', db.getUserInformationByUsername);
-
+app.get('/leases/:id', db.getLeasesByReviewId);
+app.post('/leases', db.addLease);
 
 app.post('/login', auth.login)
 app.post('/logout', auth.logout)
