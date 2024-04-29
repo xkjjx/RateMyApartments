@@ -8,7 +8,6 @@
 
     const id = $page.params.area; 
     let isAdmin = false;
-    let addApartmentMode = false;
     let apartments = [];
     let name = ""
     onMount(async () => {
@@ -29,19 +28,3 @@
     <h1>Apartments in {name.name}</h1>
     <ApartmentCards apartments={apartments} areaId={id}/>
 </div>
-
-
-<!-- {#if isAdmin}
-    <button on:click={addApartmentFirst}>Add Apartment</button>
-{/if} -->
-
-<!-- {#if addApartmentMode}
-    <form on:submit|preventDefault={addApartmentFrontend}>
-        <input type="text" placeholder="Name" id="name" required>
-        <input type="text" placeholder="Description" id="description" required>
-        <input type="text" placeholder="Address" id="address" required>
-        <input type="text" placeholder="Google Map Link" id="gmap" required>
-        <input type="text" placeholder="Apple Map Link" id="amap" required>
-        <button type="submit">Submit</button>
-    </form>
-{/if} -->

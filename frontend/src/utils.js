@@ -1,4 +1,11 @@
 import { env } from '$env/dynamic/public'
+import { format, parseISO } from 'date-fns';
+
+export const PSQLDateToMonthYear = (psql_date) => {
+    const date = parseISO(psql_date);
+    return(format(date, "MMMM yyyy"));
+}
+
 
 
 export const getApartmentsInArea = async (areaId) => {
@@ -153,6 +160,12 @@ export const getReviewsByUser = async (userId) => {
     const response = await fetch(`${env.PUBLIC_BACKEND}/reviews/user/${userId}`);
     const data = await response.json();
     console.log(data);
+    return data;
+}
+
+export const getLeasesByReviewId = async (reviewId) => {
+    const response = await fetch(`${env.PUBLIC_BACKEND}/leases/${reviewId}`);
+    const data = await response.json();
     return data;
 }
 

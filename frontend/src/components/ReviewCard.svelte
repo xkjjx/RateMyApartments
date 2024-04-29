@@ -1,5 +1,7 @@
 <script>
+    import Leases from './Leases.svelte';
     export let review;
+    console.log(review);
 </script>
 
 <style>
@@ -24,5 +26,8 @@
         </div>
         <small class="text-muted">Rating: {review.rating}/5</small>
       </div>
+    </div>
+    <div class="card-body">
+      <Leases reviewId={review.id}/>
     </div>
   </div>
