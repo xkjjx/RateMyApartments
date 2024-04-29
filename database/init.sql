@@ -55,6 +55,7 @@ CREATE TABLE leases (
     start_date DATE,
     end_date DATE,
     rent DECIMAL(10, 2),
+    floorplan VARCHAR(255),
     water_included BOOLEAN,
     electricity_included BOOLEAN,
     parking_cost DECIMAL(10, 2) DEFAULT NULL,
