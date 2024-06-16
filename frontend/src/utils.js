@@ -6,8 +6,6 @@ export const PSQLDateToMonthYear = (psql_date) => {
     return(format(date, "MMMM yyyy"));
 }
 
-
-
 export const getApartmentsInArea = async (areaId) => {
     const response = await fetch(`${env.PUBLIC_BACKEND}/areas/${areaId}/apartments`);
     const data = await response.json();

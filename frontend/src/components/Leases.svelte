@@ -14,8 +14,9 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
+                <th scope="col">Lease Start Date</th>
+                <th scope="col">Lease End Date</th>
+                <th scope="col">Date Signed</th>
                 <th scope="col">Rent</th>
             </tr>
         </thead>
@@ -24,6 +25,7 @@
                 <tr>
                     <td>{PSQLDateToMonthYear(lease.start_date)}</td>
                     <td>{PSQLDateToMonthYear(lease.end_date)}</td>
+                    <td>{PSQLDateToMonthYear(lease.sign_date)}</td>
                     <td>{lease.rent}</td>
                 </tr>
             {/each}
