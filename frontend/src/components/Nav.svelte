@@ -35,7 +35,7 @@
     }
 </script>
 
-<nav class="navbar fixed-top bg-light">
+<nav class="navbar bg-light">
     <div class="container-fluid">
         <div class="justify-content-start">
             <a href="/" class="navbar-brand">Rate My Apartments</a>

@@ -3,9 +3,12 @@
     import { getLeasesByReviewId, PSQLDateToMonthYear } from "../utils";
     export let reviewId;
     let leases = [];
+
+    let loading = true;
     onMount(async () => {
         leases = await getLeasesByReviewId(reviewId);
         console.log(leases);
+        loading = false;
     });
 
     function includedUtilitiesString(lease){
@@ -35,31 +38,37 @@
     }
 </script>
 
+{#if loading}
+    <div class="container text-center pt-5">
+        <h3>Loading leases...</h3>
+    </div>
+{:else}
 {#if leases.length !== 0}
-<div class="container text-center pt-5">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Lease Start Date</th>
-                <th scope="col">Lease End Date</th>
-                <th scope="col">Date Signed</th>
-                <th scope="col">Included Utilities</th>
-                <th scope="col">Rent</th>
-                <th scope="col">Parking</th>
-            </tr>
-        </thead>
-        <tbody>
-            {#each leases as lease}
+    <div class="container text-center pt-5">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>{PSQLDateToMonthYear(lease.start_date)}</td>
-                    <td>{PSQLDateToMonthYear(lease.end_date)}</td>
-                    <td>{PSQLDateToMonthYear(lease.sign_date)}</td>
-                    <td>{includedUtilitiesString(lease)}</td>
-                    <td>{"$" + lease.rent}</td>
-                    <td>{parkingString(lease)}</td>
+                    <th scope="col">Lease Start Date</th>
+                    <th scope="col">Lease End Date</th>
+                    <th scope="col">Date Signed</th>
+                    <th scope="col">Included Utilities</th>
+                    <th scope="col">Rent</th>
+                    <th scope="col">Parking</th>
                 </tr>
-            {/each}
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                {#each leases as lease}
+                    <tr>
+                        <td>{PSQLDateToMonthYear(lease.start_date)}</td>
+                        <td>{PSQLDateToMonthYear(lease.end_date)}</td>
+                        <td>{PSQLDateToMonthYear(lease.sign_date)}</td>
+                        <td>{includedUtilitiesString(lease)}</td>
+                        <td>{"$" + lease.rent}</td>
+                        <td>{parkingString(lease)}</td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
+    {/if}
 {/if}

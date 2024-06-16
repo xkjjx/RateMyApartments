@@ -8,6 +8,7 @@
 
     const id = $page.params.apartment; 
 
+    let loading = true;
     let info = {"name":""};
     let reviews = [];
     let newTitle = "";
@@ -19,6 +20,7 @@
     onMount(async () => {
         info = await getApartmentInformation(id);
         reviews = await getReviews(id);
+        loading = false;
     });
 
     function addReviewPressedTrue(){
@@ -78,37 +80,44 @@
     }
 </style>
 
-<div class="container mt-5">
-    <h1>{info.name}</h1>
-    <p>{info.address}</p>
-    <p>{info.description}</p>
-</div>
 
-<div class="container mt-5">
-    <h2>Reviews</h2>
-</div>
+{#if loading}
+    <div class="container text-center pt-5">
+        <h1>Loading apartment information...</h1>
+    </div>
+{:else}
+    <div class="container mt-5">
+        <h1>{info.name}</h1>
+        <p>{info.address}</p>
+        <p>{info.description}</p>
+    </div>
 
-<div class="container mt-5">
-    {#if !addReviewPressed}
-        <button type="button" class="btn btn-primary" on:click={addReviewPressedTrue}>Add Review</button>
-    {:else}
-        <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Title" bind:value={newTitle}>
-        </div>
-        <div class="mb-3">
-            <div class="rating">
-                {#each Array(5) as _, i (i)}
-                    <input type="radio" id="star{5-i}" name="rating" bind:group={newRating} value={5-i} />
-                    <label for="star{5-i}" class="bi bi-star-fill"></label>
-                {/each}
+    <div class="container mt-5">
+        <h2>Reviews</h2>
+    </div>
+
+    <div class="container mt-5">
+        {#if !addReviewPressed}
+            <button type="button" class="btn btn-primary" on:click={addReviewPressedTrue}>Add Review</button>
+        {:else}
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Title" bind:value={newTitle}>
             </div>
-        </div>
-        <div class="mb-3">
-            <textarea class="form-control" rows="4" placeholder="Enter your review here..." bind:value={newContent}></textarea>
-        </div>
-        <button type="button" class="btn btn-primary" on:click={addReview}>Submit</button>
-    {/if}
-</div>
+            <div class="mb-3">
+                <div class="rating">
+                    {#each Array(5) as _, i (i)}
+                        <input type="radio" id="star{5-i}" name="rating" bind:group={newRating} value={5-i} />
+                        <label for="star{5-i}" class="bi bi-star-fill"></label>
+                    {/each}
+                </div>
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" rows="4" placeholder="Enter your review here..." bind:value={newContent}></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" on:click={addReview}>Submit</button>
+        {/if}
+    </div>
+{/if}
 
 <ReviewCards bind:reviews={reviews}/>
 

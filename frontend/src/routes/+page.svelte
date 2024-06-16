@@ -1,10 +1,10 @@
 <script>
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
-    import { addApartment, getApartmentsInArea, deleteApartment,getAreaName } from '../utils.js'
+    import { addApartment, getApartmentsInArea, deleteApartment, getAreaName } from '../utils.js'
     import ApartmentCards from '../components/ApartmentCards.svelte';
 
-
+    let loading = true;
     const id = 1; 
     let isAdmin = false;
     let apartments = [];
@@ -18,12 +18,18 @@
         } else {
             isAdmin = false;
         }
+        loading = false;
     });
 
 </script>
 
-
-<div class="container text-center pt-5">
-    <h1>Apartments in {name.name}</h1>
-    <ApartmentCards apartments={apartments} areaId={id}/>
-</div>
+{#if loading}
+    <div class="container text-center pt-5">
+        <h1>Loading apartments in your area...</h1>
+    </div>
+{:else}
+    <div class="container text-center pt-5">
+        <h1>Apartments in {name.name}</h1>
+        <ApartmentCards apartments={apartments} areaId={id}/>
+    </div>
+{/if}
