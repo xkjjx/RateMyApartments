@@ -1,22 +1,29 @@
 <script>
+    import { page } from '$app/stores';
     import { onMount } from 'svelte';
-    import { getAreas } from '../utils.js';
-    import 'bootstrap/dist/css/bootstrap.min.css';
-    import AreaCard from '../components/AreaCard.svelte';
-    import AreaCards from '../components/AreaCards.svelte';
+    import { addApartment, getApartmentsInArea, deleteApartment,getAreaName } from '../utils.js'
+    import ApartmentCards from '../components/ApartmentCards.svelte';
 
 
-    let areas = [];
+    const id = 1; 
+    let isAdmin = false;
+    let apartments = [];
+    let name = ""
     onMount(async () => {
-        areas = await getAreas();
+        apartments = await getApartmentsInArea(id);
+        name = await getAreaName(id);
+        isAdmin = localStorage.getItem('isAdmin');
+        if(isAdmin == "true"){
+            isAdmin = true;
+        } else {
+            isAdmin = false;
+        }
     });
+
 </script>
 
 
 <div class="container text-center pt-5">
-    <h1 class="my-4">Locations</h1>
-    <AreaCards {areas}/>
+    <h1>Apartments in {name.name}</h1>
+    <ApartmentCards apartments={apartments} areaId={id}/>
 </div>
-
-
-

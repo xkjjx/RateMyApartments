@@ -1,8 +1,7 @@
 <script>
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
-    import { addApartment, getApartmentsInArea, deleteApartment } from '../../../utils.js'
-    import { getAreaName } from '../../../utils.js'
+    import { addApartment, getApartmentsInArea, deleteApartment,getAreaName } from '../../../utils.js'
     import ApartmentCards from '../../../components/ApartmentCards.svelte';
 
 
