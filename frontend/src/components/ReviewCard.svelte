@@ -16,7 +16,6 @@
       <h5 class="card-title">{review.title}</h5>
     </div>
     <div class="card-body">
-      <p class="card-text">{review.content}</p>
       <div class="d-flex justify-content-between align-items-center">
         <div class="text-warning">
           <!-- Displaying stars based on the review rating -->
@@ -26,6 +25,7 @@
         </div>
         <small class="text-muted">Rating: {review.rating}/5</small>
       </div>
+      <p class="card-text">{review.content}</p>
     </div>
     <div class="card-body">
       <Leases reviewId={review.id}/>

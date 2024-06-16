@@ -7,6 +7,32 @@
         leases = await getLeasesByReviewId(reviewId);
         console.log(leases);
     });
+
+    function includedUtilitiesString(lease){
+        let includedUtilitiesString = "";
+        if (lease.electricity_included){
+            includedUtilitiesString += "Electricity, ";
+        }
+        if (lease.water_included){
+            includedUtilitiesString += "Water, ";
+        }
+        if(includedUtilitiesString == ""){
+            return "Electricity and Water not Included";
+        }
+        return includedUtilitiesString.slice(0, -2) + " Included";
+    }
+
+    function parkingString(lease){
+        if (!lease.parking_included && lease.parking_cost){
+            return "$" + lease.parking_cost;
+        }
+        else if (!lease.parking_included && !lease.parking_cost){
+            return "Not Included";
+        }
+        else{
+            return "Included";
+        }
+    }
 </script>
 
 {#if leases.length !== 0}
@@ -17,7 +43,9 @@
                 <th scope="col">Lease Start Date</th>
                 <th scope="col">Lease End Date</th>
                 <th scope="col">Date Signed</th>
+                <th scope="col">Included Utilities</th>
                 <th scope="col">Rent</th>
+                <th scope="col">Parking</th>
             </tr>
         </thead>
         <tbody>
@@ -26,7 +54,9 @@
                     <td>{PSQLDateToMonthYear(lease.start_date)}</td>
                     <td>{PSQLDateToMonthYear(lease.end_date)}</td>
                     <td>{PSQLDateToMonthYear(lease.sign_date)}</td>
-                    <td>{lease.rent}</td>
+                    <td>{includedUtilitiesString(lease)}</td>
+                    <td>{"$" + lease.rent}</td>
+                    <td>{parkingString(lease)}</td>
                 </tr>
             {/each}
         </tbody>

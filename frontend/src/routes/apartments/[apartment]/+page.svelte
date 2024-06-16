@@ -14,10 +14,16 @@
     let newRating = "";
     let newContent = "";
 
+    let addReviewPressed = false;
+
     onMount(async () => {
         info = await getApartmentInformation(id);
         reviews = await getReviews(id);
     });
+
+    function addReviewPressedTrue(){
+        addReviewPressed = true;
+    }
 
     async function addReview() {
         let sessionToken = Cookies.get('session_token');
@@ -71,6 +77,7 @@
       color: #e0a800; /* Darker shade when hovered or selected */
     }
 </style>
+
 <div class="container mt-5">
     <h1>{info.name}</h1>
     <p>{info.address}</p>
@@ -80,22 +87,29 @@
 <div class="container mt-5">
     <h2>Reviews</h2>
 </div>
-<ReviewCards bind:reviews={reviews}/>
+
 <div class="container mt-5">
-    <div class="mb-3">
-        <input type="text" class="form-control" placeholder="Title" bind:value={newTitle}>
-    </div>
-    <div class="mb-3">
-        <div class="rating">
-            {#each Array(5) as _, i (i)}
-                <input type="radio" id="star{5-i}" name="rating" bind:group={newRating} value={5-i} />
-                <label for="star{5-i}" class="bi bi-star-fill"></label>
-            {/each}
+    {#if !addReviewPressed}
+        <button type="button" class="btn btn-primary" on:click={addReviewPressedTrue}>Add Review</button>
+    {:else}
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Title" bind:value={newTitle}>
         </div>
-    </div>
-    <div class="mb-3">
-        <textarea class="form-control" rows="4" placeholder="Enter your review here..." bind:value={newContent}></textarea>
-    </div>
-    <button type="button" class="btn btn-primary" on:click={addReview}>Add Review</button>
+        <div class="mb-3">
+            <div class="rating">
+                {#each Array(5) as _, i (i)}
+                    <input type="radio" id="star{5-i}" name="rating" bind:group={newRating} value={5-i} />
+                    <label for="star{5-i}" class="bi bi-star-fill"></label>
+                {/each}
+            </div>
+        </div>
+        <div class="mb-3">
+            <textarea class="form-control" rows="4" placeholder="Enter your review here..." bind:value={newContent}></textarea>
+        </div>
+        <button type="button" class="btn btn-primary" on:click={addReview}>Submit</button>
+    {/if}
 </div>
+
+<ReviewCards bind:reviews={reviews}/>
+
 
