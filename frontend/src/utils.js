@@ -6,6 +6,39 @@ export const PSQLDateToMonthYear = (psql_date) => {
     return(format(date, "MMMM yyyy"));
 }
 
+export function MonthYearToPSQLDate(month, year) {
+
+    const monthMapping = {
+        January: 1,
+        February: 2,
+        March: 3,
+        April: 4,
+        May: 5,
+        June: 6,
+        July: 7,
+        August: 8,
+        September: 9,
+        October: 10,
+        November: 11,
+        December: 12
+    };
+    
+    // Create a Date object for the first day of the given year and month
+    const date = new Date(parseInt(year), parseInt(month) - 1, 1);  // month is 0-based, so subtract 1
+
+    // Format the date to YYYY-MM-DD
+
+    console.log(date,year,month,monthMapping[month] - 1);
+    try{
+        const formattedDate = date.toISOString().split('T')[0];
+        return formattedDate;
+    }
+    catch(e){
+        console.log(e);
+    }
+
+}
+
 export const getApartmentsInArea = async (areaId) => {
     const response = await fetch(`${env.PUBLIC_BACKEND}/areas/${areaId}/apartments`);
     const data = await response.json();
@@ -161,12 +194,28 @@ export const getReviewsByUser = async (userId) => {
     return data;
 }
 
+export const getReview = async (reviewId) => {
+    const response = await fetch(`${env.PUBLIC_BACKEND}/review/${reviewId}`);
+    const data = await response.json();
+    return data;
+}
+
 export const getLeasesByReviewId = async (reviewId) => {
     const response = await fetch(`${env.PUBLIC_BACKEND}/leases/${reviewId}`);
     const data = await response.json();
     return data;
 }
 
+export const addLease = async ( lease) => {
+    const response = await fetch(`${env.PUBLIC_BACKEND}/leases`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(lease),
+    });
+    return response;
+}
 
 export const clearLocalStorage = () => {
     localStorage.clear();

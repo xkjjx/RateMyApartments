@@ -9,11 +9,26 @@
       background-color: #004085; /* A darker blue color */
       color: white;
     }
+
+    a { 
+      color: inherit;
+      background-color: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      font-style: inherit;
+      text-decoration: inherit;
+      text-transform: inherit;
+      letter-spacing: inherit;
+    }
 </style>
 
 <div class="card mb-3">
     <div class="card-header dark-blue-header">
-      <h5 class="card-title">{review.title}</h5>
+      <h5 class="card-title">
+        <a href='/reviews/{review.id}'>
+          {review.title}
+        </a>
+      </h5>
     </div>
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
