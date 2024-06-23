@@ -1,8 +1,9 @@
 <script>
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
-    import { getReview, MonthYearToPSQLDate, addLease } from '../../../utils.js';
+    import { getReview, MonthYearToPSQLDate, addLease, validateToken } from '../../../utils.js';
     import ReviewCard from '../../../components/ReviewCard.svelte';
+  import { add } from 'date-fns';
 
     let sign_month = '';
     let sign_year = '';
@@ -36,11 +37,16 @@
 
     let addingLeaseInformation = false;
     let loading = true;
+    let reviewByUser = false;
     let review = {};
     const review_id = $page.params.review;
     onMount(async () => {
         try{
             review = await getReview(review_id);
+            let user = await validateToken();
+            if (review.user_id == user){
+                reviewByUser = true;
+            }
             loading = false;
         } catch (error) {
             console.error(error);
@@ -83,7 +89,9 @@
 {:else}
     <div class="container mt-5">
         <ReviewCard {review} />
+        {#if !addingLeaseInformation && reviewByUser}
         <button class="btn btn-primary" on:click={addLeaseInformationButtonTrue}>Add Lease</button>
+        {/if}
         {#if addingLeaseInformation}
         <div class="card shadow-lg p-5">
             <h2 class="text-2xl font-bold mb-4">Lease Form</h2>

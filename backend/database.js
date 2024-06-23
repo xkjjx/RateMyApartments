@@ -285,15 +285,29 @@ const getLeasesByReviewId = async(request, response) => {
 }
 
 const addLease = async(request, response) => {
-    const { review_id, start_date, end_date,rent,water_included,electricity_included,parking_cost,parking_covered,sign_date } = request.body;
-    pool.query('INSERT INTO leases (review_id, start_date, end_date, rent, water_included, electricity_included, parking_cost, parking_covered, sign_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id', [review_id, start_date, end_date, rent, water_included, electricity_included, parking_cost, parking_covered, sign_date], (error, results) => {
-        if (error) {
-            response.status(400).send(`Error: ${error}`);
+    const session_id = request.cookies.session_token;
+    if (!session_id) {
+        response.status(401).send('No access token provided. Please log in.');
+        return;
+    }
+    else{
+        const user_id = await validateTokenAndReturnUserId(session_id, response);
+        const { review_id, start_date, end_date,rent,water_included,electricity_included,parking_cost,parking_covered,sign_date } = request.body;
+        const user_id_by_review_id = await pool.query('SELECT user_id FROM reviews WHERE id = $1', [review_id]);
+        if(user_id == null || user_id != user_id_by_review_id){
+            response.status(401).send('Access token expired or invalid. Please log in again.');
+            return;
         }
-        else{
-            response.json(results.rows[0]);
-        }
-    })
+        pool.query('INSERT INTO leases (review_id, start_date, end_date, rent, water_included, electricity_included, parking_cost, parking_covered, sign_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id', [review_id, start_date, end_date, rent, water_included, electricity_included, parking_cost, parking_covered, sign_date], (error, results) => {
+            if (error) {
+                response.status(400).send(`Error: ${error}`);
+            }
+            else{
+                response.json(results.rows[0]);
+            }
+        })
+
+    }
 }
 
 const getReview = async(request, response) => {
