@@ -50,8 +50,9 @@
             "apartment_id": id
         }
         let response = await postReview(request);
+        console.log(response);
         if(response != -1){
-            reviews = await getReviews(id);
+            window.location.href = `/reviews/${response.id}`;
         }
         else{
             alert("Failed to add review");
