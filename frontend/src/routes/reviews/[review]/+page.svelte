@@ -1,7 +1,7 @@
 <script>
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
-    import { getReview, MonthYearToPSQLDate, addLease, validateToken } from '../../../utils.js';
+    import { getReview, MonthYearToPSQLDate, addLease, validateToken, getFloorplansByApartmentId } from '../../../utils.js';
     import ReviewCard from '../../../components/ReviewCard.svelte';
   import { add } from 'date-fns';
 
@@ -33,6 +33,8 @@
     { value: '12', name: 'December' },
     ];
 
+    let floorplans = [];
+
     const years = Array.from({ length: 50 }, (_, i) => (new Date().getFullYear() - 25 + i).toString());
 
     let addingLeaseInformation = false;
@@ -44,6 +46,7 @@
         try{
             review = await getReview(review_id);
             let user = await validateToken();
+            floorplans = await getFloorplansByApartmentId(review.apartment_id);
             if (review.user_id == user){
                 reviewByUser = true;
             }
@@ -69,15 +72,22 @@
             "start_date": MonthYearToPSQLDate(start_month, start_year),
             "end_date": MonthYearToPSQLDate(end_month, end_year),
             "rent": rent,
-            "floorplan": floorplan,
+            "floorplan_id": floorplan.id,
             "water_included": water_included,
             "electricity_included": electricity_included,
             "parking_cost": parking_cost,
             "parking_covered": parking_covered
         }
         
-        await addLease(leaseInformation);
-        window.location.reload();
+        let response = await addLease(leaseInformation);
+
+        if (response.status == 200){
+            window.location.reload();
+        }
+        else{
+            alert("Failed to add lease information");
+            console.error(response);
+        }
     }
 </script>
 
@@ -148,12 +158,15 @@
                 </div>
               </div>
               <div class="form-group mb-4">
-                <label for="rent" class="block text-gray-700">Rent</label>
-                <input type="number" step="0.01" id="rent" bind:value={rent} class="form-control border rounded w-full py-2 px-3" placeholder="Enter Rent">
+                <select id="floorplan" bind:value={floorplan} class="form-control border rounded py-2 px-3">
+                  <option value="" disabled selected>Select Floorplan</option>
+                  {#each floorplans as floorplan}
+                    <option value={floorplan}>{floorplan.name}</option>
+                  {/each}
               </div>
               <div class="form-group mb-4">
-                <label for="floorplan" class="block text-gray-700">Floorplan</label>
-                <input type="text" id="floorplan" bind:value={floorplan} class="form-control border rounded w-full py-2 px-3" placeholder="Enter Floorplan">
+                <label for="rent" class="block text-gray-700">Rent</label>
+                <input type="number" step="0.01" id="rent" bind:value={rent} class="form-control border rounded w-full py-2 px-3" placeholder="Enter Rent">
               </div>
               <div class="form-group mb-4">
                 <label for="water_included" class="block text-gray-700">Water Included</label>

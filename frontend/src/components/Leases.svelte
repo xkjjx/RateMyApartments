@@ -1,13 +1,15 @@
 <script>
     import { onMount } from "svelte";
-    import { getLeasesByReviewId, PSQLDateToMonthYear } from "../utils";
+    import { getLeasesByReviewId, PSQLDateToMonthYear, getFloorplanById } from "../utils";
     export let reviewId;
     let leases = [];
 
     let loading = true;
     onMount(async () => {
         leases = await getLeasesByReviewId(reviewId);
-        console.log(leases);
+        for (let i = 0; i < leases.length; i++){
+            leases[i].floorplan = await getFloorplanById(leases[i].floorplan_id);
+        }
         loading = false;
     });
 
@@ -51,6 +53,7 @@
                     <th scope="col">Lease Start Date</th>
                     <th scope="col">Lease End Date</th>
                     <th scope="col">Date Signed</th>
+                    <th scope="col">Floorplan</th>
                     <th scope="col">Included Utilities</th>
                     <th scope="col">Rent</th>
                     <th scope="col">Parking</th>
@@ -62,6 +65,7 @@
                         <td>{PSQLDateToMonthYear(lease.start_date)}</td>
                         <td>{PSQLDateToMonthYear(lease.end_date)}</td>
                         <td>{PSQLDateToMonthYear(lease.sign_date)}</td>
+                        <td>{lease.floorplan.name}</td>
                         <td>{includedUtilitiesString(lease)}</td>
                         <td>{"$" + lease.rent}</td>
                         <td>{parkingString(lease)}</td>

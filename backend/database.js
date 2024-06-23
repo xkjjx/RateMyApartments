@@ -190,7 +190,7 @@ const deleteApartment = async (request, response) => {
     const id = request.params.id;
     pool.query('DELETE FROM apartments where id = $1',[id],(error,results) => {
         if(error){
-            console.log(error);
+            console.error(error);
             response.status(400).send(`Error: ${error}`)
         }
         else{
@@ -291,14 +291,23 @@ const addLease = async(request, response) => {
         return;
     }
     else{
-        const user_id = await validateTokenAndReturnUserId(session_id, response);
-        const { review_id, start_date, end_date,rent,water_included,electricity_included,parking_cost,parking_covered,sign_date } = request.body;
-        const user_id_by_review_id = await pool.query('SELECT user_id FROM reviews WHERE id = $1', [review_id]);
-        if(user_id == null || user_id != user_id_by_review_id){
+        const user_id_response = await pool.query('SELECT user_id FROM sessions WHERE token = $1 AND expires_at > NOW()', [session_id]);
+        let user_id;
+        if(user_id_response == 401 || user_id_response.rows.length == 0){
             response.status(401).send('Access token expired or invalid. Please log in again.');
             return;
         }
-        pool.query('INSERT INTO leases (review_id, start_date, end_date, rent, water_included, electricity_included, parking_cost, parking_covered, sign_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id', [review_id, start_date, end_date, rent, water_included, electricity_included, parking_cost, parking_covered, sign_date], (error, results) => {
+        else{
+            user_id = user_id_response.rows[0].user_id;
+        }
+        const { floorplan_id,review_id, start_date, end_date,rent,water_included,electricity_included,parking_cost,parking_covered,sign_date } = request.body;
+        let user_id_by_review_id = await pool.query('SELECT user_id FROM reviews WHERE id = $1', [review_id]);
+        user_id_by_review_id = user_id_by_review_id.rows[0].user_id;
+        if(user_id != user_id_by_review_id){
+            response.status(401).send('Access token expired or invalid. Please log in again.');
+            return;
+        }
+        pool.query('INSERT INTO leases (review_id, start_date, end_date, rent, water_included, electricity_included, parking_cost, parking_covered, sign_date, floorplan_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id', [review_id, start_date, end_date, rent, water_included, electricity_included, parking_cost, parking_covered, sign_date, floorplan_id], (error, results) => {
             if (error) {
                 response.status(400).send(`Error: ${error}`);
             }
@@ -320,6 +329,27 @@ const getReview = async(request, response) => {
     })
 }
 
+const getAllFloorplansForApartment = async (request, response) => {
+    const apartmentId = parseInt(request.params.id);
+
+    pool.query('SELECT * FROM floorplans WHERE apartment_id = $1', [apartmentId], (error, results) => {
+        if (error || !results.rows) {
+            response.status(400).send(`Error: ${error}`);
+        }
+        response.status(200).json(results.rows);
+    })
+}
+
+const getFloorplanById = async (request, response) => {
+    const floorplanId = parseInt(request.params.id);
+
+    pool.query('SELECT * FROM floorplans WHERE id = $1', [floorplanId], (error, results) => {
+        if (error || !results.rows) {
+            response.status(400).send(`Error: ${error}`);
+        }
+        response.status(200).json(results.rows[0]);
+    })
+}
 
 
 module.exports = 
@@ -345,7 +375,9 @@ module.exports =
         getReviewsByUserId,
         getLeasesByReviewId,
         addLease,
-        getReview
+        getReview,
+        getAllFloorplansForApartment,
+        getFloorplanById
     }
 
 

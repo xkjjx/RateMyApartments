@@ -213,10 +213,23 @@ export const addLease = async ( lease) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(lease),
+        credentials: 'include'
     });
     return response;
 }
 
 export const clearLocalStorage = () => {
     localStorage.clear();
+}
+
+export const getFloorplansByApartmentId = async (apartmentId) => {
+    const response = await fetch(`${env.PUBLIC_BACKEND}/floorplans/${apartmentId}`);
+    const data = await response.json();
+    return data;
+}
+
+export const getFloorplanById = async (floorplanId) => {
+    const response = await fetch(`${env.PUBLIC_BACKEND}/floorplan/${floorplanId}`);
+    const data = await response.json();
+    return data;
 }

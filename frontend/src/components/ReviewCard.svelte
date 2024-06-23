@@ -1,7 +1,6 @@
 <script>
     import Leases from './Leases.svelte';
     export let review;
-    console.log(review);
 </script>
 
 <style>

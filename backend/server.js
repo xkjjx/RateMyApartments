@@ -49,6 +49,8 @@ app.get('/users/:id', db.getUserNameById);
 app.post('/user', db.addUser);
 app.get('/users/username/:username', db.getUserInformationByUsername);
 app.get('/leases/:id', db.getLeasesByReviewId);
+app.get('/floorplans/:id', db.getAllFloorplansForApartment);
+app.get('/floorplan/:id', db.getFloorplanById);
 app.post('/leases', db.addLease);
 
 app.post('/login', auth.login)

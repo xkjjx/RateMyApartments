@@ -55,10 +55,21 @@ CREATE TABLE leases (
     start_date DATE,
     end_date DATE,
     rent DECIMAL(10, 2),
-    floorplan VARCHAR(255),
+    floorplan_id INT,
     water_included BOOLEAN,
     electricity_included BOOLEAN,
     parking_cost DECIMAL(10, 2) DEFAULT NULL,
     parking_covered BOOLEAN,
-    FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE
+    FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE,
+    FOREIGN KEY (floorplan_id) REFERENCES floorplans(id) ON DELETE CASCADE
+);
+
+CREATE TABLE floorplans (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    description TEXT,
+    image VARCHAR(255),
+    apartment_id INT,
+    num_bedrooms INT,
+    FOREIGN KEY (apartment_id) REFERENCES apartments(id) ON DELETE CASCADE
 );
