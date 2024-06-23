@@ -89,7 +89,7 @@
 {:else}
     <div class="container mt-5">
         <h1>{info.name}</h1>
-        <p>{info.address}</p>
+        <h4>{info.address}</h4>
         <p>{info.description}</p>
     </div>
 
