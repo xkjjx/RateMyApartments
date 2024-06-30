@@ -4,6 +4,7 @@ const port = 3000;
 const db = require('./database.js')
 const cors = require('cors')
 const auth = require('./login.js')
+const photos = require('./photos.js')
 const cookieParser = require('cookie-parser');
 const hostname = process.env.HOSTNAME || 'localhost';
 
@@ -52,6 +53,8 @@ app.get('/leases/:id', db.getLeasesByReviewId);
 app.get('/floorplans/:id', db.getAllFloorplansForApartment);
 app.get('/floorplan/:id', db.getFloorplanById);
 app.post('/leases', db.addLease);
+
+app.get('/apartments/:id/photo', photos.getApartmentPhoto)
 
 app.post('/login', auth.login)
 app.post('/logout', auth.logout)

@@ -233,3 +233,9 @@ export const getFloorplanById = async (floorplanId) => {
     const data = await response.json();
     return data;
 }
+
+export const getApartmentPhotoUrl = async (apartmentId) => {
+    const response = await fetch(`${env.PUBLIC_BACKEND}/apartments/${apartmentId}/photo`);
+    const data = await response.json();
+    return data.url;
+}

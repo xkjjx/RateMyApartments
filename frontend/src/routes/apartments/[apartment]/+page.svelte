@@ -1,7 +1,7 @@
 <script>
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
-    import { getApartmentInformation, postReview, getReviews } from '../../../utils.js'
+    import { getApartmentInformation, postReview, getReviews, getApartmentPhotoUrl } from '../../../utils.js'
     import { get } from 'svelte/store';
     import Cookies from 'js-cookie';
     import ReviewCards from '../../../components/ReviewCards.svelte';
@@ -14,12 +14,14 @@
     let newTitle = "";
     let newRating = "";
     let newContent = "";
+    let img_url = "";
 
     let addReviewPressed = false;
 
     onMount(async () => {
         info = await getApartmentInformation(id);
         reviews = await getReviews(id);
+        img_url = await getApartmentPhotoUrl(id);
         loading = false;
     });
 
@@ -79,6 +81,16 @@
     .rating input:checked ~ label {
       color: #e0a800; /* Darker shade when hovered or selected */
     }
+
+    #main-image-container {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center;
+    }
+
+    .img-fluid {
+        height: 1000px;
+    }
 </style>
 
 
@@ -91,6 +103,10 @@
         <h1>{info.name}</h1>
         <h4>{info.address}</h4>
         <p>{info.description}</p>
+    </div>
+
+    <div class="container mt-5" id="main-image-container">
+        <img src={img_url} alt="Apartment" class="img-fluid">
     </div>
 
     <div class="container mt-5">
