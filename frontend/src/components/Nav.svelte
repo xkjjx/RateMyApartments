@@ -35,7 +35,26 @@
     }
 </script>
 
-<nav class="navbar bg-light">
+
+<style>
+    .navbar {
+        background-color: #002254; /* A darker blue color */
+        padding: 1% 8%;
+    }
+
+    .navbar-brand {
+        color: white;
+    }
+
+    .navbar-text {
+        color: white;
+    }
+    .btn {
+        color: white;
+    }
+</style>
+
+<nav class="navbar">
     <div class="container-fluid">
         <div class="justify-content-start">
             <a href="/" class="navbar-brand">Rate My Apartments</a>

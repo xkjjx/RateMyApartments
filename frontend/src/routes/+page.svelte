@@ -23,6 +23,12 @@
 
 </script>
 
+<style>
+    .container{
+        min-height: -webkit-fill-available;
+    }
+</style>
+
 {#if loading}
     <div class="container text-center pt-5">
         <h1>Loading apartments in your area...</h1>

@@ -19,6 +19,16 @@
       text-transform: inherit;
       letter-spacing: inherit;
     }
+
+    .card-header{
+      padding: 2% 1% 1% 4%;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-body{
+      padding: 2% 5% 5% 5%;
+    }
 </style>
 
 <div class="card mb-3">
@@ -40,8 +50,6 @@
         <small class="text-muted">Rating: {review.rating}/5</small>
       </div>
       <p class="card-text">{review.content}</p>
-    </div>
-    <div class="card-body">
       <Leases reviewId={review.id}/>
     </div>
-  </div>
+</div>
