@@ -89,7 +89,8 @@
     }
 
     .img-fluid {
-        height: 1000px;
+        width: 75%;
+        height: auto
     }
 </style>
 

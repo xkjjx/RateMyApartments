@@ -25,7 +25,7 @@
         border: none !important; /* Remove borders */
         background-color: #003366; /* Dark blue color */
         color: white; /* White text color */
-        width: 25%;
+        width: 200px;
         display: flex;
     }
     .card:hover {
