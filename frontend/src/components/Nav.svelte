@@ -25,6 +25,9 @@
                 }
             });
         }
+        else{
+            clearLocalStorage();
+        }
     });
 
     async function logoutFrontend(){

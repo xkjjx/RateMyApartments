@@ -11,7 +11,7 @@
         document.querySelector('input[type="password"]').value = '';
         if(response.status == 200){
             await setLocalStorageWithUsernameValues(username);
-            window.location.href = '/';
+            // window.location.href = '/';
         } else {
             loginFailed = true;
         }
